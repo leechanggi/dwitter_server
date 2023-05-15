@@ -64,5 +64,5 @@ app.use((err, req, res, next) => {
 sequelize.sync().then((value) => {
   const server = app.listen(port);
   initSocket(server);
-  console.log(`SERVER_START : { DATE : "${new Date().toString()}" }`);
+  console.log(`{ 'SERVER_START' : { 'DATE' : '${new Date()}' } }`);
 });
