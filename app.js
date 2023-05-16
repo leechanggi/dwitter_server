@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 sequelize.sync().then((value) => {
-  const server = app.listen(port);
+  const server = app.listen(8080);
   initSocket(server);
   console.log(`{ 'SERVER_START' : { 'DATE' : '${new Date()}' } }`);
 });
