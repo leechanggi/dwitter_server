@@ -5,6 +5,12 @@ const { host, username, password, port, database } = config.db;
 export const sequelize = new SQ.Sequelize(database, username, password, {
   host,
   port,
-  dialect: 'mysql',
+  dialect: 'postgres',
   logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
