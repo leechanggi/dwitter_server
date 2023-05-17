@@ -19,7 +19,7 @@ const HOST_SERVER = config.host.server; // 8080
 const HOST_CLIENT = config.host.client; // cors
 
 // Deploy
-const port = config.port; // 8080
+const ports = config.port; // 8080
 const CORS_ORIGIN = config.cors.origin; // cors
 
 const options = {
@@ -62,7 +62,9 @@ app.use((err, req, res, next) => {
 });
 
 sequelize.sync().then((value) => {
-  const server = app.listen(port);
+  const server = app.listen(ports);
   initSocket(server);
-  console.log(`{ 'SERVER_START' : { 'DATE' : '${new Date()}' } }`);
+  console.log(
+    `{ 'SERVER_START' : { 'DATE' : '${new Date()}' }, 'SERVER_SOCKET' : 'is-Active' }`
+  );
 });
