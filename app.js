@@ -33,11 +33,10 @@ const options = {
   },
 };
 const corsOptions = {
-  // origin: [`http://localhost:${HOST_CLIENT}`],
-  origin: CORS_ORIGIN,
+  origin: [`http://localhost:${HOST_CLIENT}`],
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   optionsSuccessStatus: 200,
-  credentials: true,
+  credentials: true, // Access-Control-Allow-Credentials
 };
 
 app.use(express.json());
@@ -65,6 +64,6 @@ sequelize.sync().then((value) => {
   const server = app.listen(ports);
   initSocket(server);
   console.log(
-    `{ 'SERVER_START' : { 'DATE' : '${new Date()}' }, 'SERVER_SOCKET' : 'is-Active' }`
+    `SERVER_START : { 'STATE' : 'is-Active', 'PORT': '${ports}', 'DATE' : '${new Date()}' }`
   );
 });

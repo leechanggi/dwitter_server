@@ -31,7 +31,9 @@ class Socket {
     });
 
     this.io.on("connection", (socket) => {
-      console.log("Socket client connected");
+      console.log(
+        `SERVER_SOCKET : { 'STATE' : 'is-Active', 'DATE' : '${new Date()}' }`
+      );
     });
   }
 }

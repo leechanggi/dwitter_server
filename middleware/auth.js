@@ -2,29 +2,35 @@ import { config } from "../config.js";
 import jwt from "jsonwebtoken";
 import * as userRep from "../data/auth.js";
 
-const jwtSecretKey = config.jwt.secretKey;
-const msgAuthError = { message: "Authentication Error" };
+const JWT_SECRET_KEY = config.jwt.secretKey;
+const AUTH_ERROR = { message: "Authentication Error" };
 
 export async function isAuth(req, res, next) {
+  let token;
   const authHeader = req.get("Authorization");
-  if (!(authHeader && authHeader.startsWith("Bearer "))) {
-    return res.status(401).json(msgAuthError);
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.split(" ")[1];
   }
-  const token = authHeader.split(" ")[1];
-  jwt.verify(
-    token, //
-    jwtSecretKey, //
-    async (error, decoded) => {
-      if (error) {
-        return res.status(401).json(msgAuthError);
-      }
-      const user = await userRep.findById(decoded.id);
-      if (!user) {
-        return res.status(401).json(msgAuthError);
-      }
-      req.userId = user.id;
-      req.token = user.token;
-      next();
+
+  if (!token) {
+    token = req.cookies["token"];
+  }
+
+  if (!token) {
+    return res.status(401).json(AUTH_ERROR);
+  }
+
+  jwt.verify(token, JWT_SECRET_KEY, async (error, decoded) => {
+    if (error) {
+      return res.status(401).json(AUTH_ERROR);
     }
-  );
+    const user = await userRep.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json(AUTH_ERROR);
+    }
+    req.userId = user.id;
+    req.token = user.token;
+    next();
+  });
 }
