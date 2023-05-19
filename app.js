@@ -2,6 +2,7 @@ import { config } from "./config.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import csrf from "csurf";
 import morgan from "morgan";
 import helmet from "helmet";
 import "express-async-errors";
@@ -38,6 +39,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
   credentials: true, // Access-Control-Allow-Credentials
 };
+const csrfProtection = csrf({ cookie: true });
 
 app.use(express.json());
 app.use(cookieParser());
@@ -48,8 +50,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public", options));
 
 // API router
-app.use("/tweets", tweetsRouter);
-app.use("/auth", authRouter);
+app.use("/tweets", csrfProtection, tweetsRouter);
+app.use("/auth", csrfProtection, authRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);
