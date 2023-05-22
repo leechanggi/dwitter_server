@@ -1,20 +1,20 @@
-import { config } from "../config.js";
-import jwt from "jsonwebtoken";
-import * as userRep from "../data/auth.js";
+import { config } from '../config.js';
+import jwt from 'jsonwebtoken';
+import * as userRep from '../data/auth.js';
 
 const JWT_SECRET_KEY = config.jwt.secretKey;
-const AUTH_ERROR = { message: "Authentication Error" };
+const AUTH_ERROR = { message: 'Authentication Error' };
 
 export async function isAuth(req, res, next) {
   let token;
-  const authHeader = req.get("Authorization");
+  const authHeader = req.get('Authorization');
 
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
   }
 
   if (!token) {
-    token = req.cookies["token"];
+    token = req.cookies['token'];
   }
 
   if (!token) {
