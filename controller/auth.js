@@ -5,9 +5,10 @@ import "express-async-errors";
 
 import * as userRep from "../data/auth.js";
 
-const jwtSecretKey = config.jwt.secretKey;
-const jwtExpireSec = config.jwt.expireSec;
-const bcryptSalt = config.bcrypt.salt;
+const JWT_SECRET_KEY = config.jwt.secretKey;
+const JWT_EXPIRE_SEC = config.jwt.expireSec;
+const BCRYPT_SALT = config.bcrypt.salt;
+const CSRF_SECRET_KEY = config.csrf.secretKey;
 
 export async function signup(req, res) {
   const { username, password, name, email, url } = req.body;
@@ -15,7 +16,7 @@ export async function signup(req, res) {
   if (foundUsername) {
     return res.status(409).json({ message: "사용할 수 없는 아이디 입니다." });
   }
-  const hashed = bcrypt.hashSync(password, bcryptSalt);
+  const hashed = bcrypt.hashSync(password, BCRYPT_SALT);
   const userId = await userRep.create({
     username,
     password: hashed,
@@ -60,8 +61,13 @@ export async function me(req, res) {
   res.status(200).json({ token: req.token, username: user.username });
 }
 
+export async function csrfToken(req, res, next) {
+  const csrfToken = await generateCsrfToken();
+  return res.status(200).json({ csrfToken });
+}
+
 function createJwtToken(id) {
-  return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtExpireSec });
+  return jwt.sign({ id }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRE_SEC });
 }
 
 function setToken(res, token) {
@@ -72,4 +78,8 @@ function setToken(res, token) {
     secure: true,
   };
   res.cookie("token", token, options);
+}
+
+async function generateCsrfToken() {
+  return bcrypt.hash(CSRF_SECRET_KEY, 1);
 }

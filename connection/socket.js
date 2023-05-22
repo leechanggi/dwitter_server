@@ -2,7 +2,6 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import { config } from "../config.js";
 
-const HOST_CLIENT = config.host.client;
 const JWT_SECRETKEY = config.jwt.secretKey;
 const CORS_ORIGIN = config.cors.origin;
 
@@ -12,7 +11,6 @@ class Socket {
   constructor(server) {
     this.io = new Server(server, {
       cors: {
-        // origin: [`http://localhost:${HOST_CLIENT}`],
         origin: CORS_ORIGIN,
       },
     });

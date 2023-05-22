@@ -10,10 +10,9 @@ function required(key, defaultValue = undefined) {
 }
 
 export const config = {
-  // DEV
-  host: {
-    server: parseInt(required("HOST_SERVER", "8080")),
-    client: parseInt(required("HOST_CLIENT", "3000")),
+  port: parseInt(required("PORT", "8080")),
+  cors: {
+    origin: required("CORS_ORIGIN", "*"),
   },
   jwt: {
     secretKey: required("JWT_SECRET_KEY"),
@@ -29,9 +28,7 @@ export const config = {
     port: required("DB_PORT", "3306"),
     database: required("DB_DATABASE", "dwitter"),
   },
-  // DEPLOY
-  port: parseInt(required("PORT", "8080")),
-  cors: {
-    origin: required("CORS_ORIGIN", "*"),
+  csrf: {
+    secretKey: required("CSRF_SECRET_KEY"),
   },
 };
