@@ -7,4 +7,5 @@ const max = config.rateLimit.max;
 export default rateLimit({
   windowMs,
   max,
+  keyGenerator: (req, res) => "dwitter",
 });
