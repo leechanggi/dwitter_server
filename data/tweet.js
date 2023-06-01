@@ -1,10 +1,10 @@
-import SQ, { where } from 'sequelize';
-import { sequelize } from '../db/database.js';
-import { User } from './auth.js';
+import SQ, { where } from "sequelize";
+import { sequelize } from "../db/database.js";
+import { User } from "./auth.js";
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
-const Tweet = sequelize.define('tweet', {
+const Tweet = sequelize.define("tweet", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -21,23 +21,23 @@ Tweet.belongsTo(User);
 
 const INCLUDE_USER = {
   attributes: [
-    'id',
-    'text',
-    'createdAt',
-    'userId',
-    [Sequelize.col('user.name'), 'name'],
-    [Sequelize.col('user.username'), 'username'],
-    [Sequelize.col('user.url'), 'url'],
+    "id",
+    "text",
+    "createdAt",
+    "userId",
+    [Sequelize.col("user.name"), "name"],
+    [Sequelize.col("user.username"), "username"],
+    [Sequelize.col("user.url"), "url"],
   ],
   include: { model: User, attributes: [] },
 };
 
 const ORDER_DESC = {
-  order: [['createdAt', 'DESC']],
+  order: [["createdAt", "DESC"]],
 };
 
 export async function getAll() {
-  return Tweet.findAll({ ...INCLUDE_USER, ...ORDER_DESC });
+  return Tweet.findAll({ ...INCLUDE_USER, ...ORDER_DESC, raw: true });
 }
 
 export async function getAllByUsername(username) {
@@ -45,6 +45,7 @@ export async function getAllByUsername(username) {
     ...INCLUDE_USER,
     ...ORDER_DESC,
     include: { ...INCLUDE_USER.include, where: { username } },
+    raw: true,
   });
 }
 
@@ -56,17 +57,17 @@ export async function getById(id) {
 }
 
 export async function create(text, userId) {
-  return Tweet.create({ text, userId }).then(data => getById(data.dataValues.id));
+  return Tweet.create({ text, userId }).then((data) => getById(data.dataValues.id));
 }
 
 export async function update(id, text) {
   return Tweet.findByPk(id, INCLUDE_USER) //
-    .then(tweet => {
+    .then((tweet) => {
       tweet.text = text;
       return tweet.save();
     });
 }
 
 export async function remove(id) {
-  return Tweet.findByPk(id).then(tweet => tweet.destroy());
+  return Tweet.findByPk(id).then((tweet) => tweet.destroy());
 }

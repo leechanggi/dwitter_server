@@ -34,3 +34,21 @@ export async function isAuth(req, res, next) {
     next();
   });
 }
+
+export async function authHandler(req) {
+  const authHeader = req.get("Authorization");
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET_KEY);
+    const user = await userRep.findById(decoded.id);
+    if (!user) {
+      throw { status: 401, ...AUTH_ERROR };
+    }
+    req.userId = user.id;
+    req.token = decoded;
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw { status: 401, ...AUTH_ERROR };
+  }
+}

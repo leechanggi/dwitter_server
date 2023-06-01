@@ -2,11 +2,7 @@ import { config } from "../config.js";
 import bcrypt from "bcrypt";
 
 export const csrfCheck = (req, res, next) => {
-  if (
-    req.method === "GET" ||
-    req.method === "OPTIONS" ||
-    req.method === "HEAD"
-  ) {
+  if (req.method === "GET" || req.method === "OPTIONS" || req.method === "HEAD") {
     return next();
   }
 
