@@ -24,26 +24,26 @@ const validateLogin = [
   validate,
 ];
 
-// const validateSignup = [
-//   ...validateLogin,
-//   body('name') //
-//     .notEmpty() //
-//     .withMessage('이름을 입력하세요.'),
-//   body('email')
-//     .trim()
-//     .notEmpty()
-//     .withMessage('이메일을 입력하세요.')
-//     .isEmail()
-//     .normalizeEmail()
-//     .withMessage('형식에 맞는 이메일을 입력하세요.'),
-//   body('url')
-//     .isURL() //
-//     .withMessage('형식에 맞는 URL을 입력하세요.')
-//     .optional({ nullable: true, checkFalsy: true }),
-//   validate,
-// ];
+const validateSignup = [
+  ...validateLogin,
+  body("name") //
+    .notEmpty() //
+    .withMessage("이름을 입력하세요."),
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("이메일을 입력하세요.")
+    .isEmail()
+    .normalizeEmail()
+    .withMessage("형식에 맞는 이메일을 입력하세요."),
+  body("url")
+    .isURL() //
+    .withMessage("형식에 맞는 URL을 입력하세요.")
+    .optional({ nullable: true, checkFalsy: true }),
+  validate,
+];
 
-// router.post('/signup', validateSignup, authCont.signup);
+router.post("/signup", validateSignup, authCont.signup);
 router.post("/login", validateLogin, authCont.login);
 router.post("/logout", authCont.logout);
 router.get("/me", isAuth, authCont.me);

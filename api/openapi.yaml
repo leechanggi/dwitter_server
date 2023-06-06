@@ -1,25 +1,24 @@
 openapi: 3.0.0
 info:
-  description: This is Dwitter API service.
+  description: Node.js를 기반으로 한 API서비스 문서 입니다.
   version: 1.0.0
-  title: Dwitter - Dream Coding Nodejs Test Project
+  title: Dwitter
   contact:
-    email: info@dream-coding.com
+    email: lxyex1379@gmail.com
 servers:
   - url: "http://localhost:8080"
 tags:
   - name: auth
-    description: Methods to handle authentication
+    description: 계정 관리 메소드
   - name: tweets
-    description: Methods to access and manage tweets
+    description: 트윗 관리 메소드
 
 paths:
   /auth/signup:
     post:
       tags:
         - auth
-      summary: Signs up a user to the Dwitter service
-      description: Creates a user account for the given user details
+      description: 계정생성
       operationId: signup
       requestBody:
         content:

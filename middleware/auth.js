@@ -1,5 +1,5 @@
-import { config } from "../config.js";
 import jwt from "jsonwebtoken";
+import { config } from "../config.js";
 import * as userRep from "../data/auth.js";
 
 const JWT_SECRET_KEY = config.jwt.secretKey;
