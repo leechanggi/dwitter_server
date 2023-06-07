@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
+import express, { Express, Request, Response } from "express";
 import "express-async-errors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -13,8 +13,9 @@ import rateLimiter from "./middleware/rateLimiter.js";
 
 import tweetsRouter from "./router/tweets.js";
 import authRouter from "./router/auth.js";
+import { NextFunction } from "express";
 
-const app = express();
+const app: Express = express();
 const ports = config.port;
 const CORS_ORIGIN = config.cors.origin;
 
@@ -24,8 +25,8 @@ const options = {
   index: false,
   maxAge: "1d",
   redirect: false,
-  setHeaders: function (res, path, stat) {
-    res.set("x-timestamp", Date.now());
+  setHeaders: function (res: Response, path: string, stat: any) {
+    res.set("x-timestamp", Date.now().toString());
   },
 };
 
@@ -46,7 +47,7 @@ app.use(cors(corsOptions));
 app.use(morgan("tiny"));
 
 app.use(rateLimiter);
-app.use(csrfCheck);
+// app.use(csrfCheck);
 
 app.use("/auth", authRouter);
 app.use("/tweets", tweetsRouter);
@@ -55,7 +56,7 @@ app.use((req, res, next) => {
   res.sendStatus(404);
 });
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
     message: err.message,
