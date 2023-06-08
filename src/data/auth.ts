@@ -1,4 +1,4 @@
-import SQ from "sequelize";
+import * as SQ from "sequelize";
 import { sequelize } from "../db/database.js";
 const DataTypes = SQ.DataTypes;
 
@@ -34,14 +34,14 @@ export const User = sequelize.define(
   { timestamps: false }
 );
 
-export async function findByUsername(username) {
+export async function findByUsername(username: string): Promise<SQ.Model<any, any>> {
   return User.findOne({ where: { username } });
 }
 
-export async function findById(id) {
+export async function findById(id: string) {
   return User.findByPk(id);
 }
 
-export async function create(user) {
+export async function create(user: {}) {
   return User.create(user).then((data) => data.dataValues.id);
 }

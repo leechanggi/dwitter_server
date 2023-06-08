@@ -25,7 +25,7 @@ const options = {
   index: false,
   maxAge: "1d",
   redirect: false,
-  setHeaders: function (res: Response, path: string, stat: any) {
+  setHeaders: function (res: express.Response<any, Record<string, any>>, path: string, stat: any) {
     res.set("x-timestamp", Date.now().toString());
   },
 };
@@ -47,12 +47,12 @@ app.use(cors(corsOptions));
 app.use(morgan("tiny"));
 
 app.use(rateLimiter);
-// app.use(csrfCheck);
+app.use(csrfCheck);
 
 app.use("/auth", authRouter);
 app.use("/tweets", tweetsRouter);
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(404);
 });
 
@@ -63,7 +63,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-sequelize.sync().then((value) => {
+sequelize.sync().then(() => {
   const server = app.listen(ports);
   initSocket(server);
   console.log(
