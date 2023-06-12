@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config.js";
-import * as userRep from "../data/auth.js";
+import * as userRep from "../data/auth";
 
 const JWT_SECRET_KEY = config.jwt.secretKey;
 const AUTH_ERROR = { message: "Authentication Error" };

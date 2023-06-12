@@ -1,6 +1,6 @@
 import * as SQ from "sequelize";
 import { sequelize } from "../db/database.js";
-import { User } from "./auth.js";
+import { User } from "./auth";
 
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
@@ -69,6 +69,6 @@ export async function update(id: string, text: string) {
     });
 }
 
-export async function remove(id: string) {
+export async function remove(id: string): Promise<void> {
   return Tweet.findByPk(id).then((tweet: any) => tweet.destroy());
 }

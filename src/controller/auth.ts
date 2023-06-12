@@ -3,14 +3,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "express-async-errors";
 
-import * as userRep from "../data/auth.js";
+import * as userRep from "../data/auth";
+import { Request, Response, NextFunction } from "express";
 
 const JWT_SECRET_KEY = config.jwt.secretKey;
 const JWT_EXPIRE_SEC = config.jwt.expireSec;
 const BCRYPT_SALT = config.bcrypt.salt;
 const CSRF_SECRET_KEY = config.csrf.secretKey;
 
-export async function signup(req, res) {
+export async function signup(req: Request, res: Response) {
   const { username, password, name, email, url } = req.body;
   const foundUsername = await userRep.findByUsername(username);
   if (foundUsername) {
@@ -29,7 +30,7 @@ export async function signup(req, res) {
   res.status(201).json({ token, username });
 }
 
-export async function login(req, res) {
+export async function login(req: Request, res: Response) {
   const { username, password } = req.body;
   const user = await userRep.findByUsername(username);
   if (!user) {
@@ -44,12 +45,12 @@ export async function login(req, res) {
   res.status(200).json({ token, username });
 }
 
-export async function logout(req, res, next) {
+export async function logout(req: Request, res: Response, next: NextFunction) {
   res.cookie("token", "");
   res.status(200).json({ message: "로그아웃이 완료되었습니다." });
 }
 
-export async function me(req, res) {
+export async function me(req: Request, res: Response) {
   const user = await userRep.findById(req.userId);
   if (!user) {
     return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
@@ -57,7 +58,7 @@ export async function me(req, res) {
   res.status(200).json({ token: req.token, username: user.username });
 }
 
-export async function csrfToken(req, res, next) {
+export async function csrfToken(req: Request, res: Response, next: NextFunction) {
   const csrfToken = await generateCsrfToken();
   return res.status(200).json({ csrfToken });
 }

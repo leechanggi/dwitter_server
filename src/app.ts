@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -11,9 +11,8 @@ import { sequelize } from "./db/database.js";
 import { csrfCheck } from "./middleware/csrf.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
-import tweetsRouter from "./router/tweets.js";
-import authRouter from "./router/auth.js";
-import { NextFunction } from "express";
+import tweetsRouter from "./router/tweets";
+import authRouter from "./router/auth";
 
 const app: Express = express();
 const ports = config.port;
